@@ -48,7 +48,7 @@ def main():
             requests.post(url, cookies=login.cookies, verify=False)
 
         # toggle throttle on
-        elif(not is_throttled and streams < 1 and trigger == 'start'):
+        elif(not is_throttled and trigger == 'start'):
 
             url = f'{QBIT_HOSTNAME}/api/v2/transfer/toggleSpeedLimitsMode'
 
