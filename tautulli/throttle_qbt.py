@@ -5,6 +5,11 @@ Throttles qBittorrent traffic while Plex detects active playback
 Required python modules: requests
 
 Tautulli triggers: Playback start, Playback resume, Playback stop, Playback pause
+Arguments:
+    Playback start: start {streams}
+    Playback resume: start {streams}
+    Playback stop: stop {streams}
+    Playback pause: stop {streams}
 '''
 import sys, requests
 
@@ -16,6 +21,7 @@ QBIT_PASS = 'adminadmin'
 def main():
     try:
         trigger = sys.argv[1]
+        streams = int(sys.argv[2])
     except:
         print('Invalid argument')
         return
@@ -34,13 +40,15 @@ def main():
         state = requests.get(url, cookies=login.cookies, verify=False)
         is_throttled = bool(int(state.content))
 
-        if(is_throttled and trigger == 'stop'):
+        # toggle throttle off
+        if(is_throttled and streams < 1 and trigger == 'stop'):
 
             url = f'{QBIT_HOSTNAME}/api/v2/transfer/toggleSpeedLimitsMode'
 
             requests.post(url, cookies=login.cookies, verify=False)
 
-        elif(not is_throttled and trigger == 'start'):
+        # toggle throttle on
+        elif(not is_throttled and streams < 1 and trigger == 'start'):
 
             url = f'{QBIT_HOSTNAME}/api/v2/transfer/toggleSpeedLimitsMode'
 
