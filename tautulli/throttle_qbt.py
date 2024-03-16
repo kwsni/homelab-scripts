@@ -40,8 +40,11 @@ def main():
         state = requests.get(url, cookies=login.cookies, verify=False)
         is_throttled = bool(int(state.content))
 
+        print(f'Throttle: {is_throttled}')
+        print(f'Streams: {streams}')
+
         # toggle throttle off
-        if(is_throttled and streams < 1 and trigger == 'stop'):
+        if(is_throttled and streams <= 1 and trigger == 'stop'):
 
             url = f'{QBIT_HOSTNAME}/api/v2/transfer/toggleSpeedLimitsMode'
 
